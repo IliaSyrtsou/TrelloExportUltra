@@ -1,7 +1,7 @@
-Export for Trello
+Export for Trello with Costello power-up support
 ============
 
-Chrome extension to export data from Trello.
+Chrome extension to export data from Trello. Also exports Costello.
 
 Install Published Version
 -------------------------

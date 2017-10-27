@@ -40,7 +40,7 @@ function createExcelExport() {
     }
 
     var idBoard = parts[1];
-    var apiURL = "https://trello.com/1/boards/" + idBoard + "?lists=all&cards=all&card_pluginData=true&card_attachments=cover&card_stickers=true&card_fields=badges%2Cclosed%2CpluginData%2CdateLastActivity%2Cdesc%2CdescData%2Cdue%2CidAttachmentCover%2CidList%2CidBoard%2CidMembers%2CidShort%2Clabels%2CidLabels%2Cname%2Cpos%2CshortUrl%2CshortLink%2Csubscribed%2Curl&card_checklists=none&members=all&member_fields=fullName%2Cinitials%2CmemberType%2Cusername%2CavatarHash%2Cbio%2CbioData%2Cconfirmed%2Cproducts%2Curl%2Cstatus&membersInvited=all&membersInvited_fields=fullName%2Cinitials%2CmemberType%2Cusername%2CavatarHash%2Cbio%2CbioData%2Cconfirmed%2Cproducts%2Curl&checklists=none&organization=true&organization_fields=name%2CdisplayName%2Cdesc%2CdescData%2Curl%2Cwebsite%2Cprefs%2Cmemberships%2ClogoHash%2Cproducts&myPrefs=true&fields=name%2Cclosed%2CdateLastActivity%2CdateLastView%2CidOrganization%2Cprefs%2CshortLink%2CshortUrl%2Curl%2Cdesc%2CdescData%2Cinvitations%2Cinvited%2ClabelNames%2Cmemberships%2Cpinned%2CpowerUps%2Csubscribed%2CpluginData";
+    var apiURL = "https://trello.com/1/boards/" + idBoard + `?lists=all&cards=all&card_pluginData=true&card_attachments=cover&card_stickers=true&card_fields=badges%2Cclosed%2CpluginData%2CdateLastActivity%2Cdesc%2CdescData%2Cdue%2CidAttachmentCover%2CidList%2CidBoard%2CidMembers%2CidShort%2Clabels%2CidLabels%2Cname%2Cpos%2CshortUrl%2CshortLink%2Csubscribed%2Curl&card_checklists=none&members=all&member_fields=fullName%2Cinitials%2CmemberType%2Cusername%2CavatarHash%2Cbio%2CbioData%2Cconfirmed%2Cproducts%2Curl%2Cstatus&membersInvited=all&membersInvited_fields=fullName%2Cinitials%2CmemberType%2Cusername%2CavatarHash%2Cbio%2CbioData%2Cconfirmed%2Cproducts%2Curl&checklists=none&organization=true&organization_fields=name%2CdisplayName%2Cdesc%2CdescData%2Curl%2Cwebsite%2Cprefs%2Cmemberships%2ClogoHash%2Cproducts&myPrefs=true&fields=name%2Cclosed%2CdateLastActivity%2CdateLastView%2CidOrganization%2Cprefs%2CshortLink%2CshortUrl%2Curl%2Cdesc%2CdescData%2Cinvitations%2Cinvited%2ClabelNames%2Cmemberships%2Cpinned%2CpowerUps%2Csubscribed%2CpluginData`;
 
     var pluginDataURL = "https://trello.com/1/boards/" + idBoard + "/pluginData";
     debugger;
@@ -93,9 +93,9 @@ function createExcelExport() {
                             parsed = title.match(pointReg),
                             points = parsed ? parsed[1] : '',
                             due = card.due || '',
-                            price = 0,
-                            pricePerPiece = '',//may be empty
-                            quantity = '',
+                            price = '0',
+                            pricePerPiece = '0',//may be empty
+                            quantity = '0',
                             memberIDs,
                             memberInitials = [],
                             labels = [],
@@ -105,17 +105,23 @@ function createExcelExport() {
                             r;
                         var costsObj = JSON.parse(pluginData[3].value);//IT IS VARIABLE, IN MY CASE COSTS PLUGIN store data there.
                         if(costsObj.costs) {
-                            price = costsObj.costs[card.id] || 0;
+                            price = costsObj.costs[card.id] || '0';
                         }
-                        
+
                         title = title.replace(pointReg, '');
-                        
+
+                        //Extract Quantity
                         var customFieldsPlugin = JSON.parse(pluginData[0].value);//IT IS VARIABLE, IN MY CASE COSTS PLUGIN store data there.
                         if(customFieldsPlugin){
                             var customFieldsIdPlugin = pluginData[0].idPlugin;
                             var quantityFieldId = -1;
                             var quantityField = customFieldsPlugin.fields.find(function(field){
-                                return field.n.toLowerCase() === 'количество' || field.n === 'кол-во';
+                                return field.n.toLowerCase() === 'количество' ||
+                                field.n.toLowerCase() === 'кол-во' ||
+                                field.n.toLowerCase() === 'quantity' ||
+                                field.n.toLowerCase() === 'count' ||
+                                field.n === '№' || 
+                                field.n === '#';
                             });
                             if(quantityField) {
                                 quantityFieldId = quantityField.id;
@@ -125,10 +131,10 @@ function createExcelExport() {
                             });
                             if(customFieldsPluginInCard){
                                 var fieldsObj = JSON.parse(customFieldsPluginInCard.value);
-                                quantity = fieldsObj.fields[quantityFieldId];
+                                quantity = fieldsObj.fields[quantityFieldId] || '0';
                             }
                         }
-                        
+
                         // tag archived cards
                         if (card.closed) {
                             title = '[archived] ' + title;

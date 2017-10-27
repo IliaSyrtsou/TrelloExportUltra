@@ -1,11 +1,11 @@
-Export for Trello with Costello power-up support
+Export for Trello with Costello and few CustomFields power-up support
 ============
 
-Chrome extension to export data from Trello. Also exports Costello.
+Chrome extension to export data from Trello. Also exports Costello and few CustomFields like "Quantity", "Count", "#", "№", "Количество", "Кол-во", all case-insensitive.
 
 Install Published Version
 -------------------------
-Grab it from the [Chrome Web Store](https://chrome.google.com/webstore/detail/trelloexport/nhdelomnagopgaealggpgojkhcafhnin?hl=en).
+Not yet available, will deploy soon.
 
 
 Install Development Version
@@ -25,7 +25,7 @@ Usage
 
 Credit
 ------
-Inspired by some non-functioning code I found hiding in [TrelloScrum](https://github.com/Q42/TrelloScrum/).
+Needed to manage inventory in Trello, so decided to improve extension a little bit. Write to syrtsou.ilia@gmail.com if you'd like support for more.
 
 
 Notes
